@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ff2e63" />
+  <meta name="description" content="DressPanic! — get dressed before the clock runs out." />
+
+  <title>DressPanic!</title>
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app" id="app">
+    <header class="app__header">
+      <h1 class="logo">Dress<span>Panic!</span></h1>
+      <p class="tagline">Skeleton ready. Time to build.</p>
+    </header>
+
+    <section class="card" id="status-card">
+      <p class="status" id="status">Booting&hellip;</p>
+      <button class="btn" id="install-btn" hidden>Install app</button>
+    </section>
+
+    <footer class="app__footer">
+      <span id="net-status" class="badge">checking&hellip;</span>
+      <span class="version">v0.1.0</span>
+    </footer>
+  </main>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>
