@@ -24,7 +24,8 @@
   import PageHeader from '$lib/components/PageHeader.svelte';
   import ItemForm, { draftFromItem, draftFields, emptyDraft, type ItemFormDraft } from '$lib/components/ItemForm.svelte';
   import IconArrowLeft from '@tabler/icons-svelte/icons/arrow-left';
-  import IconPlus from '@tabler/icons-svelte/icons/plus';
+  import IconCamera from '@tabler/icons-svelte/icons/camera';
+  import IconPhoto from '@tabler/icons-svelte/icons/photo';
   import IconTrash from '@tabler/icons-svelte/icons/trash';
   import IconWand from '@tabler/icons-svelte/icons/wand';
   import IconStarFilled from '@tabler/icons-svelte/icons/star-filled';
@@ -53,6 +54,7 @@
   let saving = $state(false);
   let removingId = $state<string | null>(null);
   let fileInput: HTMLInputElement;
+  let cameraInput: HTMLInputElement;
 
   const wearCount = $derived(wears.length);
   const lastWorn = $derived(wears.map((w) => w.date).sort().at(-1));
@@ -125,6 +127,7 @@
 </PageHeader>
 
 <input bind:this={fileInput} type="file" accept="image/*" multiple class="hidden" onchange={onAddPhotos} />
+<input bind:this={cameraInput} type="file" accept="image/*" capture="environment" class="hidden" onchange={onAddPhotos} />
 
 {#if !item}
   <p class="px-4 pt-10 text-center text-[15px] text-ink2">This piece doesn't exist anymore.</p>
@@ -168,13 +171,22 @@
           </div>
         </div>
       {/each}
-      <button
-        class="press flex aspect-square w-[30%] shrink-0 snap-center items-center justify-center rounded-card bg-tile text-ink3"
-        aria-label="Add photos"
-        onclick={() => fileInput.click()}
-      >
-        <IconPlus size={24} stroke={1.5} />
-      </button>
+      <div class="flex aspect-square w-[30%] shrink-0 snap-center flex-col gap-2">
+        <button
+          class="press flex flex-1 items-center justify-center rounded-card bg-tile text-ink3"
+          aria-label="Take photo"
+          onclick={() => cameraInput.click()}
+        >
+          <IconCamera size={22} stroke={1.5} />
+        </button>
+        <button
+          class="press flex flex-1 items-center justify-center rounded-card bg-tile text-ink3"
+          aria-label="Add photos from library"
+          onclick={() => fileInput.click()}
+        >
+          <IconPhoto size={22} stroke={1.5} />
+        </button>
+      </div>
     </div>
 
     <div class="flex items-center justify-between rounded-card bg-tile px-4 py-3">

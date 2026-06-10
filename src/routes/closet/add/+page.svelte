@@ -9,6 +9,7 @@
   import PageHeader from '$lib/components/PageHeader.svelte';
   import ItemForm, { emptyDraft, draftFields, type ItemFormDraft } from '$lib/components/ItemForm.svelte';
   import IconCamera from '@tabler/icons-svelte/icons/camera';
+  import IconPhoto from '@tabler/icons-svelte/icons/photo';
   import IconWand from '@tabler/icons-svelte/icons/wand';
   import IconTrash from '@tabler/icons-svelte/icons/trash';
   import IconArrowLeft from '@tabler/icons-svelte/icons/arrow-left';
@@ -28,6 +29,7 @@
   let saving = $state(false);
   let savedCount = $state(0);
   let fileInput: HTMLInputElement;
+  let cameraInput: HTMLInputElement;
 
   const current = $derived(queue[index]);
   const activeBlob = $derived(current?.useRemoved && current.removed ? current.removed.blob : current?.blob);
@@ -124,23 +126,42 @@
   class="hidden"
   onchange={onFiles}
 />
+<input
+  bind:this={cameraInput}
+  type="file"
+  accept="image/*"
+  capture="environment"
+  class="hidden"
+  onchange={onFiles}
+/>
 
 {#if !current}
   <div class="anim-fade flex flex-col items-center gap-5 px-8 pt-20 text-center">
     <p class="text-[15px] text-ink2">
       {preparing ? 'Preparing photos…' : 'Shoot or pick photos — then annotate them one by one.'}
     </p>
-    <button class="btn-primary" disabled={preparing} onclick={() => fileInput.click()}>
-      <IconCamera size={18} stroke={2} /> Pick photos
+    <button class="btn-primary" disabled={preparing} onclick={() => cameraInput.click()}>
+      <IconCamera size={18} stroke={2} /> Take photo
+    </button>
+    <button class="btn-ghost" disabled={preparing} onclick={() => fileInput.click()}>
+      <IconPhoto size={18} stroke={1.75} /> Pick from library
     </button>
   </div>
 {:else}
   <div class="flex flex-col gap-4 px-4">
     <div class="flex items-center justify-between">
       <span class="data">{savedCount + 1} / {savedCount + queue.length}</span>
-      <button class="press p-1 text-ink3" aria-label="Skip this photo" onclick={advance}>
-        <IconTrash size={18} stroke={1.75} />
-      </button>
+      <div class="flex items-center gap-3">
+        <button class="press p-1 text-ink3" aria-label="Take another photo" disabled={preparing} onclick={() => cameraInput.click()}>
+          <IconCamera size={18} stroke={1.75} />
+        </button>
+        <button class="press p-1 text-ink3" aria-label="Pick more photos" disabled={preparing} onclick={() => fileInput.click()}>
+          <IconPhoto size={18} stroke={1.75} />
+        </button>
+        <button class="press p-1 text-ink3" aria-label="Skip this photo" onclick={advance}>
+          <IconTrash size={18} stroke={1.75} />
+        </button>
+      </div>
     </div>
 
     <div class="relative aspect-square w-full overflow-hidden rounded-card bg-tile">
