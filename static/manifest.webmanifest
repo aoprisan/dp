@@ -1,13 +1,13 @@
 {
   "name": "Dress Panic",
   "short_name": "DressPanic",
-  "description": "The archive for the things you wear.",
+  "description": "Your wardrobe, offline. Catalog, plan, wear.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f2ecdf",
-  "theme_color": "#f2ecdf",
+  "background_color": "#fafaf7",
+  "theme_color": "#fafaf7",
   "icons": [
     {
       "src": "icons/icon.svg",

@@ -1,33 +1,43 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { base } from '$app/paths';
-  import { toast } from '$lib/toast.svelte.js';
+  import IconHanger from '@tabler/icons-svelte/icons/hanger';
+  import IconStack2 from '@tabler/icons-svelte/icons/stack-2';
+  import IconCalendar from '@tabler/icons-svelte/icons/calendar';
+  import IconSparkles from '@tabler/icons-svelte/icons/sparkles';
+  import IconDots from '@tabler/icons-svelte/icons/dots';
 
   const tabs = [
-    { routeId: '/', label: 'Archive', glyph: 'A', href: `${base}/`, soon: false },
-    { routeId: '/looks', label: 'Looks', glyph: 'L', href: `${base}/looks`, soon: true },
-    { routeId: '/feed', label: 'Feed', glyph: 'F', href: `${base}/feed`, soon: true },
-    { routeId: '/you', label: 'You', glyph: 'Y', href: `${base}/you`, soon: true },
+    { href: '/closet', label: 'Closet', icon: IconHanger },
+    { href: '/looks', label: 'Looks', icon: IconStack2 },
+    { href: '/calendar', label: 'Calendar', icon: IconCalendar },
+    { href: '/assistant', label: 'Assistant', icon: IconSparkles },
+    { href: '/more', label: 'More', icon: IconDots },
   ];
+  const MORE = ['/more', '/stats', '/trips', '/settings'];
 
-  function handleSoon(e: MouseEvent) {
-    e.preventDefault();
-    toast.show('In the next issue.');
+  const path = $derived(page.url.pathname.slice(base.length) || '/');
+  function isActive(href: string): boolean {
+    if (href === '/more') return MORE.some((m) => path.startsWith(m));
+    return path.startsWith(href);
   }
 </script>
 
-<nav class="tabbar" aria-label="Main">
-  <div class="tabbar__inner">
-    {#each tabs as tab}
+<nav
+  class="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ground"
+  style="padding-bottom: env(safe-area-inset-bottom)"
+>
+  <div class="mx-auto flex max-w-md">
+    {#each tabs as tab (tab.href)}
       <a
-        href={tab.href}
-        class="tab"
-        aria-current={page.route.id === tab.routeId ? 'page' : undefined}
-        onclick={tab.soon ? handleSoon : undefined}
+        href="{base}{tab.href}"
+        class="press flex flex-1 flex-col items-center gap-0.5 pt-2 pb-1.5 {isActive(tab.href)
+          ? 'text-ink'
+          : 'text-ink3'}"
+        aria-current={isActive(tab.href) ? 'page' : undefined}
       >
-        <span class="glyph">{tab.glyph}</span>
-        {tab.label}
-        {#if tab.soon}<span class="soon">soon</span>{/if}
+        <tab.icon size={22} stroke={1.75} />
+        <span class="text-[10px] font-medium">{tab.label}</span>
       </a>
     {/each}
   </div>
