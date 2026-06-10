@@ -2,8 +2,8 @@ import { addItem, addLook, ensureTag, newId, scheduleEntry } from './db/repo';
 import { db } from './db/schema';
 import type { Category, Scale } from './db/schema';
 
-async function fetchPhoto(keyword: string, lock: number): Promise<{ blob: Blob; thumb: Blob }> {
-  const url = `https://loremflickr.com/600/800/${encodeURIComponent(keyword)}?lock=${lock}`;
+async function fetchPhoto(lock: number): Promise<{ blob: Blob; thumb: Blob }> {
+  const url = `/seed/${lock}.jpg`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`fetch ${url} → ${res.status}`);
   const blob = await res.blob();
@@ -66,7 +66,6 @@ type ItemDef = {
   warmth: Scale;
   formality: Scale;
   tagNames: string[];
-  imgKeyword: string;
   imgLock: number;
   wearDates: string[];
 };
@@ -79,7 +78,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#f5f0e8'],
     warmth: 2, formality: 3,
     tagNames: ['summer', 'work'],
-    imgKeyword: 'linen shirt fashion', imgLock: 11,
+    imgLock: 11,
     wearDates: every(7, 12),
   },
   {
@@ -88,7 +87,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#1c2b4b', '#f0ece0'],
     warmth: 2, formality: 2,
     tagNames: ['casual', 'navy'],
-    imgKeyword: 'breton stripe shirt fashion', imgLock: 12,
+    imgLock: 12,
     wearDates: every(8, 10),
   },
   {
@@ -97,7 +96,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#1a1a1a'],
     warmth: 4, formality: 3,
     tagNames: ['winter', 'layering'],
-    imgKeyword: 'turtleneck knit sweater', imgLock: 13,
+    imgLock: 13,
     wearDates: [ago(101), ago(117), ago(126), ago(140), ago(155)],
   },
   {
@@ -106,7 +105,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#8a8a8a'],
     warmth: 3, formality: 1,
     tagNames: ['casual', 'lounge'],
-    imgKeyword: 'grey hoodie oversized streetwear', imgLock: 14,
+    imgLock: 14,
     wearDates: every(3, 28),
   },
   {
@@ -115,7 +114,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#f8f8f8'],
     warmth: 2, formality: 4,
     tagNames: ['work', 'summer'],
-    imgKeyword: 'white oxford button down shirt', imgLock: 15,
+    imgLock: 15,
     wearDates: every(6, 18),
   },
   {
@@ -124,7 +123,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#6b7c3e'],
     warmth: 1, formality: 1,
     tagNames: ['summer', 'casual'],
-    imgKeyword: 'olive green t-shirt minimal', imgLock: 16,
+    imgLock: 16,
     wearDates: every(4, 20),
   },
   // ── BOTTOMS ───────────────────────────────────────────────────────────
@@ -134,7 +133,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#1c2b4b'],
     warmth: 2, formality: 2,
     tagNames: ['everyday', 'denim'],
-    imgKeyword: 'dark blue slim jeans denim', imgLock: 21,
+    imgLock: 21,
     wearDates: every(3, 32),
   },
   {
@@ -143,7 +142,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#c4a270'],
     warmth: 4, formality: 4,
     tagNames: ['work', 'winter'],
-    imgKeyword: 'camel wool dress trousers fashion', imgLock: 22,
+    imgLock: 22,
     wearDates: [ago(88), ago(102), ago(117), ago(131), ago(145), ago(160)],
   },
   {
@@ -152,7 +151,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#f0ece0'],
     warmth: 1, formality: 2,
     tagNames: ['summer'],
-    imgKeyword: 'ecru linen shorts summer fashion', imgLock: 23,
+    imgLock: 23,
     wearDates: every(5, 10),
   },
   // ── DRESSES ───────────────────────────────────────────────────────────
@@ -162,7 +161,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#1a1a1a'],
     warmth: 2, formality: 4,
     tagNames: ['dinner', 'versatile'],
-    imgKeyword: 'black midi wrap dress woman', imgLock: 31,
+    imgLock: 31,
     wearDates: [ago(11), ago(53), ago(74), ago(117)],
   },
   {
@@ -171,7 +170,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#c4603a'],
     warmth: 1, formality: 3,
     tagNames: ['summer', 'dinner'],
-    imgKeyword: 'terracotta slip dress summer elegant', imgLock: 32,
+    imgLock: 32,
     wearDates: every(10, 8),
   },
   // ── OUTERWEAR ─────────────────────────────────────────────────────────
@@ -181,7 +180,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#c4a270'],
     warmth: 3, formality: 4,
     tagNames: ['spring', 'work'],
-    imgKeyword: 'camel trench coat elegant fashion', imgLock: 41,
+    imgLock: 41,
     wearDates: every(9, 10),
   },
   {
@@ -190,7 +189,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#1a1a1a'],
     warmth: 2, formality: 2,
     tagNames: ['rock', 'evening'],
-    imgKeyword: 'black leather jacket fashion woman', imgLock: 42,
+    imgLock: 42,
     wearDates: every(11, 9),
   },
   {
@@ -199,7 +198,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#1c2b4b'],
     warmth: 3, formality: 2,
     tagNames: ['weekend', 'layering'],
-    imgKeyword: 'navy quilted gilet vest outdoor', imgLock: 43,
+    imgLock: 43,
     wearDates: [ago(92), ago(106), ago(120), ago(138)],
   },
   // ── SHOES ─────────────────────────────────────────────────────────────
@@ -209,7 +208,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#f8f8f8'],
     warmth: 1, formality: 2,
     tagNames: ['everyday'],
-    imgKeyword: 'white minimal leather sneakers fashion', imgLock: 51,
+    imgLock: 51,
     wearDates: every(3, 35),
   },
   {
@@ -218,7 +217,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#c4955a'],
     warmth: 2, formality: 3,
     tagNames: ['work', 'versatile'],
-    imgKeyword: 'tan leather loafers shoes', imgLock: 52,
+    imgLock: 52,
     wearDates: every(6, 15),
   },
   {
@@ -227,7 +226,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#1a1a1a'],
     warmth: 3, formality: 3,
     tagNames: ['autumn', 'versatile'],
-    imgKeyword: 'black chelsea boots fashion autumn', imgLock: 53,
+    imgLock: 53,
     wearDates: [ago(51), ago(62), ago(76), ago(90), ago(101), ago(116), ago(126), ago(147)],
   },
   // ── BAGS ──────────────────────────────────────────────────────────────
@@ -237,7 +236,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#1a1a1a'],
     warmth: 1, formality: 3,
     tagNames: ['everyday'],
-    imgKeyword: 'black mini shoulder bag luxury fashion', imgLock: 61,
+    imgLock: 61,
     wearDates: every(4, 25),
   },
   {
@@ -246,7 +245,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#c4955a'],
     warmth: 1, formality: 2,
     tagNames: ['work'],
-    imgKeyword: 'leather tote bag work natural', imgLock: 62,
+    imgLock: 62,
     wearDates: every(7, 14),
   },
   // ── ACCESSORIES ───────────────────────────────────────────────────────
@@ -256,7 +255,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#f0ece0'],
     warmth: 4, formality: 3,
     tagNames: ['winter', 'layering'],
-    imgKeyword: 'ivory cashmere scarf winter fashion', imgLock: 71,
+    imgLock: 71,
     wearDates: [ago(97), ago(111), ago(128), ago(140), ago(157)],
   },
   {
@@ -265,7 +264,7 @@ const ITEMS: ItemDef[] = [
     colors: ['#c9a227'],
     warmth: 1, formality: 3,
     tagNames: ['everyday'],
-    imgKeyword: 'gold stacking rings jewelry minimal', imgLock: 72,
+    imgLock: 72,
     wearDates: every(2, 40),
   },
 ];
@@ -329,7 +328,7 @@ export async function seedDatabase(onProgress?: (msg: string) => void) {
   for (let i = 0; i < ITEMS.length; i++) {
     const def = ITEMS[i];
     log(`  [${i + 1}/${ITEMS.length}] ${def.title}`);
-    const photo = await fetchPhoto(def.imgKeyword, def.imgLock);
+    const photo = await fetchPhoto(def.imgLock);
     const id = await addItem(
       {
         title: def.title,
