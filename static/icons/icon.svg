@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Dress Panic icon">
+  <!-- Dress Panic — hanger + panic mark on paper -->
+  <rect width="512" height="512" fill="#f2ecdf"/>
+  <!-- hanger hook -->
+  <path d="M256 170 V150 A34 34 0 1 0 222 116"
+        fill="none" stroke="#1d1812" stroke-width="24" stroke-linecap="round"/>
+  <!-- hanger body -->
+  <path d="M256 170 L424 332 H88 Z"
+        fill="none" stroke="#1d1812" stroke-width="24" stroke-linejoin="round"/>
+  <!-- panic exclamation, interrupted by the bar -->
+  <line x1="256" y1="208" x2="256" y2="296" stroke="#cc2014" stroke-width="34" stroke-linecap="round"/>
+  <circle cx="256" cy="368" r="18" fill="#cc2014"/>
+</svg>

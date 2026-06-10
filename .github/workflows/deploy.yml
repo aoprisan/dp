@@ -5,13 +5,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Allow the GITHUB_TOKEN to deploy to Pages.
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# One concurrent deploy; don't cancel an in-progress publish.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -26,14 +24,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          BASE_PATH: /dp
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # This is a no-build static PWA — publish the repo root.
-          path: .
+          path: build
 
       - name: Deploy
         id: deployment
