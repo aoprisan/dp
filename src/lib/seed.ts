@@ -3,7 +3,7 @@ import { db } from './db/schema';
 import type { Category, Scale } from './db/schema';
 
 async function fetchPhoto(lock: number): Promise<{ blob: Blob; thumb: Blob }> {
-  const url = `/seed/${lock}.jpg`;
+  const url = `${import.meta.env.BASE_URL}seed/${lock}.jpg`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`fetch ${url} → ${res.status}`);
   const blob = await res.blob();
