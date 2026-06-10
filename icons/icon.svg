@@ -1,9 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="DressPanic icon">
-  <rect width="512" height="512" rx="96" fill="#16161e"/>
-  <!-- a hanger -->
-  <g fill="none" stroke="#ff2e63" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M256 150c0-26 21-46 47-46s47 20 47 46c0 22-16 33-40 41"/>
-    <path d="M256 191 110 322a16 16 0 0 0 10 28h272a16 16 0 0 0 10-28L256 191z"/>
-  </g>
-  <circle cx="256" cy="191" r="14" fill="#08d9d6"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Dress Panic icon">
+  <!-- Dress Panic — hanger + panic mark on paper -->
+  <rect width="512" height="512" fill="#f2ecdf"/>
+  <!-- hanger hook -->
+  <path d="M256 170 V150 A34 34 0 1 0 222 116"
+        fill="none" stroke="#1d1812" stroke-width="24" stroke-linecap="round"/>
+  <!-- hanger body -->
+  <path d="M256 170 L424 332 H88 Z"
+        fill="none" stroke="#1d1812" stroke-width="24" stroke-linejoin="round"/>
+  <!-- panic exclamation, interrupted by the bar -->
+  <line x1="256" y1="208" x2="256" y2="296" stroke="#cc2014" stroke-width="34" stroke-linecap="round"/>
+  <circle cx="256" cy="368" r="18" fill="#cc2014"/>
 </svg>

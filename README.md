@@ -1,16 +1,28 @@
-# DressPanic!
+# Dress Panic
 
-A Progressive Web App. Installable, offline-capable, no build step — plain HTML/CSS/JS deployed to GitHub Pages via GitHub Actions.
+The archive for the things you wear. A local-first social wardrobe PWA — installable, offline-capable, no build step — plain HTML/CSS/JS deployed to GitHub Pages via GitHub Actions.
 
 **Live:** https://aoprisan.github.io/dp/
+
+## Features
+
+- **The Archive** — wardrobe item catalogue: multi-photo pieces (stored as Blobs in IndexedDB, downscaled client-side), tags, visibility scopes (public / circle / private), filtering, full add/revise/remove flows, persistent accession numbers (Nº 001…).
+- Looks, Feed, and You are stubbed in the tab bar — coming feature by feature.
+
+All data lives in IndexedDB on-device. No backend, no accounts.
 
 ## Project layout
 
 ```
 .
-├── index.html              # app shell
-├── styles.css              # styles
-├── app.js                  # bootstrap: SW registration, install prompt, network status
+├── index.html              # app shell (masthead, archive, editor + detail sheets, tab bar)
+├── styles.css              # design system: paper/ink/panic-red editorial theme
+├── app.js                  # bootstrap: SW registration, install prompt, edition badge, tabs
+├── js/
+│   ├── db.js               # IndexedDB layer (items, tags, meta counter)
+│   ├── wardrobe.js         # The Archive: rendering, filters, editor, detail
+│   └── ui.js               # shared helpers (toast)
+├── fonts/                  # self-hosted Fraunces, Instrument Sans, JetBrains Mono (woff2)
 ├── sw.js                   # service worker (cache-first app shell)
 ├── manifest.webmanifest    # PWA manifest
 ├── icons/                  # icon.svg + generated PNGs (192, 512)
@@ -41,9 +53,11 @@ When you change shell assets (`index.html`, `styles.css`, `app.js`, etc.), bump 
 
 ## Regenerating icons
 
-Edit `icons/icon.svg`, then re-render the PNGs:
+Edit `icons/icon.svg`, then re-render the PNGs (headless Chrome matches browser SVG rendering exactly):
 
 ```bash
-magick -background none -density 384 icons/icon.svg -resize 192x192 icons/icon-192.png
-magick -background none -density 384 icons/icon.svg -resize 512x512 icons/icon-512.png
+cd icons
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless \
+  --screenshot=icon-512.png --window-size=512,512 --hide-scrollbars "file://$PWD/icon.svg"
+magick icon-512.png -resize 192x192 icon-192.png
 ```

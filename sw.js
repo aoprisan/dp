@@ -1,6 +1,6 @@
 // DressPanic! service worker — cache-first app shell.
 // Bump CACHE_VERSION whenever shell assets change to invalidate old caches.
-const CACHE_VERSION = "dresspanic-v1";
+const CACHE_VERSION = "dresspanic-v3";
 
 // Paths are relative to the SW scope, so this works under any base path.
 const APP_SHELL = [
@@ -8,15 +8,32 @@ const APP_SHELL = [
   "index.html",
   "styles.css",
   "app.js",
+  "js/db.js",
+  "js/ui.js",
+  "js/wardrobe.js",
   "manifest.webmanifest",
   "icons/icon.svg",
+  "icons/icon-192.png",
+  "fonts/fonts.css",
+  "fonts/fraunces-normal-latin.woff2",
+  "fonts/fraunces-italic-latin.woff2",
+  "fonts/fraunces-normal-latin-ext.woff2",
+  "fonts/fraunces-italic-latin-ext.woff2",
+  "fonts/instrumentsans-normal-latin.woff2",
+  "fonts/instrumentsans-normal-latin-ext.woff2",
+  "fonts/jetbrainsmono-normal-latin.woff2",
+  "fonts/jetbrainsmono-normal-latin-ext.woff2",
 ];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(CACHE_VERSION)
-      .then((cache) => cache.addAll(APP_SHELL))
+      // cache: "reload" bypasses the HTTP cache so a version bump always
+      // precaches fresh copies, not heuristically-cached stale ones.
+      .then((cache) =>
+        cache.addAll(APP_SHELL.map((url) => new Request(url, { cache: "reload" })))
+      )
       .then(() => self.skipWaiting())
   );
 });
